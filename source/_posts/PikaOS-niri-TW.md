@@ -9,6 +9,8 @@ categories:
   - Linux
 date: 2025-12-25 15:56:00
 ---
+[更新：2025-12-31 12:33:00]
+
 # 安裝 PikaOS + niri
 - `PikaOS 的 ISO 以 rEFInd 啟動`，以 VM 安裝時要選 UEFI 啟動
 ![VMWare UEFI](images/PikaOS-niri-TW/VMWare UEFI.png)
@@ -55,11 +57,16 @@ pikman i fcitx5-rime
 
 ## 重啟動
 
-## 不能用中文打字 APP
+## 不能用中文打字 APP（2025/12/31 更新）
 
 目前已知有：
 
-- Super + D 打開的 pikabar-luncher
+- Super + D 打開的 pikabar-luncher （已解決）
+  - 解決方法：編輯 /ect/environment，加入「XMODIFIERS=@im=fcitx」
+  - 重啟 PikaOS。
+- Pika Software Manager 確認無法使用中文輸入法
+  - 它其實是 COSMIC Store，現在 COSMIC 專用的 App 皆不支援輸入法
+  - 可能要等 2026 下半年 COSMIC 才有更新
 
 
 # 心得
@@ -67,7 +74,7 @@ pikman i fcitx5-rime
 相比 Arch Linux、CachyOS，能輕鬆安裝好 niri 的 PikaOS 就很值得一用，不僅 UI 漂亮操作也流暢。
 
 
-但在 niri 使用中文輸入法還是有點問題，這應該是目前所有 Wayland compositor 的通病。不過文字編輯器、terminal 和瀏覽器等主要應用程式都能正常打字，依我在 CachyOS + niri 實際開發 Web 前、後端的經驗，rofi、fuzzel 兩個 Luncher 不能打中文的問題並不影響日常甚至是工作的使用。PikaOS 主打「玩遊戲的體驗」，單機遊戲一定是沒問題，就是不曉得要連網互動的遊戲能不能使用中文輸入法...目前還沒有測試過。
+雖然商店不能打中文但並不影響日常甚至是工作的使用。PikaOS 主打「玩遊戲的體驗」，單機遊戲一定是沒問題，就是不曉得要連網互動的遊戲能不能使用中文輸入法...目前還沒有測試過。
 
 
 近期準備用 PikaOS + niri 開發 Web 前、後端實際體會一段時間，看看是否適合長期使用。
