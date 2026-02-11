@@ -48,12 +48,12 @@ pikman i fcitx5-rime
 
 ## 重啟動
 
-## 不能用中文打字 APP（2025/12/31、2026/01/21 更新）
+## 不能用中文打字 APP（2025/12/31、2026/01/21、02/11 更新）
 
 目前已知有：
 
-- Super + D 打開的 pikabar-luncher （已解決、2026/01/12系統更新後又不能使用）
-  - 解決方法：編輯 /ect/environment，加入「XMODIFIERS=@im=fcitx」（2026/01/21 確認已失效）
+- Super + D 打開的 pikabar-luncher （2026/02/11 確認已解決）
+  - 解決方法：編輯 /ect/environment，加入「XMODIFIERS=@im=fcitx」
   - 重啟 PikaOS。
 - Pika Software Manager 確認無法使用中文輸入法
   - 它其實是 COSMIC Store，現在 COSMIC 專用的 App 皆不支援輸入法
@@ -71,8 +71,14 @@ pikman i fcitx5-rime
 近期準備用 PikaOS + Niri 開發 Web 前、後端實際體會一段時間，看看是否適合長期使用。
 
 
-（2026/01/21 更新心得）使用了 PikaOS + Niri 超過 10 個工作日，主要集中在：RustDesk、Ksnip(截圖)、Windsurf、Faltpak 安裝的 Line/Discord/OnlyOffice/Draw.io/Trayscale(Tailscale GUI)/dbeaver 等...在 3 個螢幕文書作業、畫 API/UI 文件線稿、製作 Markdown 文件等工作及Zen Browser 收發信/上網/查資料/看PDF/串流影音，PikaOS 本身是穩定的，更不用說 Niri 操作視窗的流暢了。（最近工作內容都在規劃、分析類，除了開資料庫修改 SQL 完全沒有 Coding）
+（2026/01/21、02/11 更新心得）使用了 PikaOS + Niri 超過 10 個工作日，主要集中在：RustDesk（遠端連Windows，只安裝 Niri 的 PikaOS 不能被控制）、Ksnip(截圖)、Windsurf、Faltpak 安裝的 Bottles+Line/Discord/OnlyOffice/Draw.io/Trayscale(Tailscale GUI)/dbeaver 等...在 3 個螢幕文書作業、畫 API/UI 文件線稿、製作 Markdown 文件等工作及Zen Browser 收發信/上網/查資料/看PDF/串流影音，PikaOS 本身是穩定的，更不用說 Niri 操作視窗的流暢了。（最近工作內容都在規劃、分析類，除了開資料庫修改 SQL 完全沒有 Coding）
 
 為了解決 pikabar-luncher 不能使用中文輸入法的問題，查到了 Niri 的版本，以及用了較早版本 noctalia shell 客製成 pika shell；我使用 CachyOS + Niri 的時間雖然比在 PikaOS + Niri 多，但 PikaOS + Niri 預設的快速鍵、客製的 shell、自帶的剪貼簿歷史還是比 CachyOS + Niri 順手多，幾乎沒改過快速鍵及裝其他套件。
 
 但是在 CachyOS 頻繁收到 noctalia shell 的更新，noctalia shell 進化得很快，有新功能也有更精緻的 UI，暫時我還會留在 CachyOS + Niri 嘗試新的 noctalia shell。
+
+（2026/02/11 更新心得）我的筆電有 Nvidia 3050 mobile，PikaOS 安裝過程沒有遇到任何問題，就只有 Winboat 啟動速度比 CachyOS 慢很多 - 從 Menu 滑鼠點圖示到 GUI 出現要超過 20 秒，但啟動後操作 Windows 的 Line、Visual Studio 等 App 速度與 CachyOS 相同。
+
+Faltpak 安裝的 Bottles+Line 比 CachyOS 穩定，但 CachyOS 最近在 2 月的更新之後已經可以從 AUR 安裝 Bottles，而且 Line 執行速度快穩定性更好，使用了 2 天雙開 Line 沒有閃退，除了在 Niri 的老問題：偶爾 Line 視窗會消失，必須用小圖示登出後再登入。 
+
+我全部的工作流程都可以在 PikaOS + Niri 上完成，可以有 100% 的信心說 PikaOS + Niri 絕對是個可以用於日常工作的 Linux Distro。如果一定要能遠端操控的話，Niri 目前的版本還不能做到，但也許可以在 PikaOS 裝 GNome 或 KDE，只要裝的起來遠端操控功能一定可以使用，因為我在 CachyOS 是使用 XFCE 桌面 + Niri 並安裝了 Xorg Server，CachyOS 登出後就可以讓 Windows 的遠端工具連線操作或讓 RustDesk 連線。
