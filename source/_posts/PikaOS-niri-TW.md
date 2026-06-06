@@ -13,7 +13,7 @@ date: 2025-12-25 15:56:00
 
 # 安裝 PikaOS + Niri
 - `PikaOS 的 ISO 以 rEFInd 啟動`，以 VM 安裝時要選 UEFI 啟動
-![VMWare UEFI](images/PikaOS-Niri-TW/VMWare UEFI.png)
+![VMWare UEFI](images/PikaOS-niri-TW/VMWare_UEFI.png)
 [參考：Hyper-V UEFI](https://blog.vnet.tw/hyper-v-%E4%BD%BF%E7%94%A8uefi-%E6%A8%A1%E5%BC%8F%E5%AE%89%E8%A3%9D-ubuntu/)
 
 - 安裝過程可以在 youtube 找到英文及在 bilibili 找到中文語音的安裝過程。數量不多，因為 PikaOS 真的是比較小眾的 distro。
@@ -42,9 +42,9 @@ pikman i fcitx5-chinese-addons
 pikman i fcitx5-rime
 ```
 
-![fcitx5 臺繁中](images/PikaOS-Niri-TW/fcitx_tw.png)
-![fcitx5 簡中](images/PikaOS-Niri-TW/fcitx_cn.png)
-![fcitx5 港繁中](images/PikaOS-Niri-TW/fcitx_hk.png)
+![fcitx5 臺繁中](images/PikaOS-niri-TW/fcitx_tw.png)
+![fcitx5 簡中](images/PikaOS-niri-TW/fcitx_cn.png)
+![fcitx5 港繁中](images/PikaOS-niri-TW/fcitx_hk.png)
 
 ## 重啟動
 
