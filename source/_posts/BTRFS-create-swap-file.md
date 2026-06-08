@@ -9,7 +9,9 @@ categories:
   - Linux
 date: 2026-06-06 11:31:48
 ---
-[更新：2026-06-05 11:31:48]
+[更新：2026-06-08 17:57:55]
+
+> 我把 /home 也放到 BTRFS subvolume，所以...swap.img 造成建 snapshot 出錯...[點我跳到解決方法](#把-swap-檔案移到沒有快照的-subvolume)
 
 雖然我的工作筆電 RAM 有 32G，但平常工作要開發網頁系統前、後端，必開瀏覽器、2 個 Antigravity IDE、LibreOffice 以及常駐通訊軟體 Discord、Bottle + LINE，隨便就能吃超過 16G。
 
@@ -78,23 +80,19 @@ sudo grep -r . /sys/kernel/debug/zswap/ 2>/dev/null
 
 ## BTRFS 檔案系統設定休眠及建立 swap file 的方法
 
-### 步驟一：建立 BTRFS 專用的 swap File
+### 步驟一：建立 BTRFS 專用的 swap file
+
+我的 RAM 有 32G，加點冗餘量避免意外發生。
+（純被蛇咬經驗...32*1024^3 超過 34G，加上電腦數字我偏好偶數，故取 36G）。
+
+1. 用 BTRFS 指令 mkswapfile 建立一個 36G 的 swap.img，它會自動處理好 Btrfs 所有的特殊限制（關閉 CoW、不壓縮、完全連續的磁碟空間）。
 
 ```bash
-# 1. 建立一個大小為 0 的空檔案
-sudo truncate -s 0 /swap.img
+sudo btrfs filesystem mkswapfile --size 36G /btrfs-swap/swap.img
+```
 
-# 2. 關鍵：關閉該檔案的 CoW 屬性 (+C，停用 Copy-on-Write)
-sudo chattr +C /swap.img
-
-# 3. 正式分配 36GB 空間給該檔案
-sudo dd if=/dev/zero of=/swap.img bs=1M count=36864 status=progress
-
-# 4. 設定權限（僅 root 可讀寫）
-sudo chmod 600 /swap.img
-
-# 5. 格式化為 Swap 並啟用
-sudo mkswap /swap.img
+啟用 swap file：
+```bash
 sudo swapon /swap.img
 ```
 
@@ -208,3 +206,79 @@ sudo reboot
 ```bash
 loginctl hibernate
 ```
+
+## 把 swap 檔案移到沒有快照的 subvolume
+
+我居然把 /home 也放到 BTRFS subvolume！！放是建 snapshot 時報錯了...BTRFS 禁止對 swap file 建 snapshot。好吧...
+
+要把 /home 移出 BTRFS subvolumes 感覺有點恐怖，所以先從最簡單的作法：把 swap file 放到新的子卷，新子卷沒設定要執行 snapshot 就不會報錯了。
+
+```bash
+sudo swapoff /swap.img
+sudo rm /swap.img
+```
+
+> 上面文章是用「swap.img」，依實際的檔名替換
+
+接下來就可以開始建立新 subvolume 及 swap file。
+
+### 步驟一：掛載 root 分區以建立新 subvolume
+
+我的 root 「/」掛在 /dev/nvme1n1p5，如果不知道實際的代號可以用 `lsblk -f` 查詢。
+
+```bash
+sudo mkdir -p /mnt/btrfs-root
+sudo mount /dev/nvme1n1p5 /mnt/btrfs-root -o subvol=/
+```
+
+建立一個專門給 Swap 用的 subvolume，名稱為 @swap。
+
+```bash
+sudo btrfs subvolume create /mnt/btrfs-root/@swap
+```
+
+建立完就可以卸載 root 分區了
+
+```bash
+sudo umount /mnt/btrfs-root
+```
+
+### 步驟二：掛載新 subvolume 並建立 swap file
+
+```bash
+sudo mkdir -p /btrfs-swap
+sudo mount /dev/nvme1n1p5 /btrfs-swap -o subvol=@swap,nodatacow,noatime
+
+sudo btrfs filesystem mkswapfile --size 36G /btrfs-swap/swap.img
+sudo swapon /btrfs-swap/swap.img
+```
+
+### 步驟三：開機自動掛載新 subvolume
+
+```bash
+sudo nano /etc/fstab
+```
+
+先刪掉原本最下方的
+
+```plaintext
+/swap.img  none  swap  defaults  0  0
+```
+
+再加入
+
+```plaintext
+UUID=你的UUID  /btrfs-swap  btrfs  subvol=@swap,nodatacow,noatime  0  0
+/btrfs-swap/swap.image                     none        swap   defaults                        0  0
+```
+
+> 用 `lsblk -f` 可以查到 UUID。
+
+存檔離開。
+
+再次建 snapshot 就會成功了！
+```bash
+sudo snapper create -d "Bug fixed snapshot"
+```
+
+> 得找個長時間把 /home 移除 subvolume，順便規劃快照 ~/.config，或...改過的設定放到有快照的 subvolume 再 ln -s 回 .config？也許也要放到 github...
